@@ -14,6 +14,7 @@ using FireSharp.Interfaces;
 using FireSharp.Response;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Java.Lang;
 
 namespace meteorAndroidApp
 {
@@ -33,7 +34,13 @@ namespace meteorAndroidApp
         private TextView _textViewHumidity;
         private TextView _textViewPressure;
         private TextView _textViewLightLevel;
+        private TextView timeShower;
+        private TextView text6;
         private Timer _timer;
+        private TextView _textViewTemperature_dif;
+        private TextView _textViewHumidity_dif;
+        private TextView _textViewPressure_dif;
+        private TextView _textViewLightLevel_dif;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -44,11 +51,21 @@ namespace meteorAndroidApp
             AndroidX.AppCompat.Widget.Toolbar toolbar = FindViewById<AndroidX.AppCompat.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
 
+            Button button = FindViewById<Button>(Resource.Id.button1);
+            button.Click += OnButtonClicked;
+
             // Find TextViews by their IDs
             _textViewTemperature = FindViewById<TextView>(Resource.Id.textView1);
             _textViewHumidity = FindViewById<TextView>(Resource.Id.textView2);
             _textViewPressure = FindViewById<TextView>(Resource.Id.textView3);
             _textViewLightLevel = FindViewById<TextView>(Resource.Id.textView4);
+            timeShower = FindViewById<TextView>(Resource.Id.textView5);
+            text6 = FindViewById<TextView>(Resource.Id.textView6);
+            // Find TextViews by their IDs
+            _textViewTemperature_dif = FindViewById<TextView>(Resource.Id.textView8);
+            _textViewHumidity_dif = FindViewById<TextView>(Resource.Id.textView9);
+            _textViewPressure_dif = FindViewById<TextView>(Resource.Id.textView10);
+            _textViewLightLevel_dif = FindViewById<TextView>(Resource.Id.textView11);
 
             // Initialize timer with 1 second interval+firebase
             try
@@ -59,7 +76,7 @@ namespace meteorAndroidApp
                 _timer.Start();
 
             }
-            catch (Exception ex) { }
+            catch (System.Exception ex) { }
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -73,6 +90,22 @@ namespace meteorAndroidApp
                 _textViewHumidity.Text = "Humidity:\n" + data["Humidity"] + " %";
                 _textViewPressure.Text = "Pressure:\n" + data["Pressure"] + " hPa";
                 _textViewLightLevel.Text = "Light level:\n" + data["LightLevel"] + " lux";
+
+
+                FirebaseResponse response2 = client.Get("Save");
+                Dictionary<string, string> data2 = JsonConvert.DeserializeObject<Dictionary<string, string>>(response2.Body.ToString());
+
+                Temperature_dif = float.Parse(data["Temperature"]) - float.Parse(data2["Temperature"]);
+                Humidity_dif = float.Parse(data["Humidity"]) - float.Parse(data2["Humidity"]);
+                Pressure_dif = float.Parse(data["Pressure"]) - float.Parse(data2["Pressure"]);
+                LightLevel_dif = float.Parse(data["LightLevel"]) - float.Parse(data2["LightLevel"]);
+
+
+
+                timeShower.Text = $"Latest Update:   {DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss")}\nLatest Save:   {data2["Time"]}";
+                text6.Text = $"Save:\nTemperature: {data2["Temperature"]} °C\nHumidity: {data2["Humidity"]}%\nPressure: {data2["Pressure"]} hPa\nLight level: {data2["LightLevel"]} lux";
+
+
             });
         }
 
@@ -109,5 +142,111 @@ namespace meteorAndroidApp
             _timer.Stop();
             _timer.Dispose();
         }
+
+        public void OnButtonClicked(object sender, EventArgs e)
+        {
+            FirebaseResponse response = client.Get("RealTime");
+            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
+            client.Set("Save", data);
+            client.Set("Save/Time", DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss"));
+
+
+        }
+
+
+        private double _temperature_dif;
+        public double Temperature_dif
+        {
+            get { return _temperature_dif; }
+            set
+            {
+                _temperature_dif = value;
+                _textViewTemperature_dif.Text = value.ToString() + " °C";
+                if (value > 0)
+                {
+                    _textViewTemperature_dif.SetTextColor(Android.Graphics.Color.Green);
+                }
+                else if (value < 0)
+                {
+                    _textViewTemperature_dif.SetTextColor(Android.Graphics.Color.Red);
+                }
+                else
+                {
+                    _textViewTemperature_dif.SetTextColor(Android.Graphics.Color.White);
+                }
+            }
+        }
+
+        private double _humidity_dif;
+        public double Humidity_dif
+        {
+            get { return _humidity_dif; }
+            set
+            {
+                _humidity_dif = value;
+                _textViewHumidity_dif.Text = value.ToString() + "%";
+                if (value > 0)
+                {
+                    _textViewHumidity_dif.SetTextColor(Android.Graphics.Color.Green);
+                }
+                else if (value < 0)
+                {
+                    _textViewHumidity_dif.SetTextColor(Android.Graphics.Color.Red);
+                }
+                else
+                {
+                    _textViewHumidity_dif.SetTextColor(Android.Graphics.Color.White);
+                }
+            }
+        }
+
+        private double _pressure_dif;
+        public double Pressure_dif
+        {
+            get { return _pressure_dif; }
+            set
+            {
+                _pressure_dif = value;
+                _textViewPressure_dif.Text = value.ToString() + " hPa";
+                if (value > 0)
+                {
+                    _textViewPressure_dif.SetTextColor(Android.Graphics.Color.Green);
+                }
+                else if (value < 0)
+                {
+                    _textViewPressure_dif.SetTextColor(Android.Graphics.Color.Red);
+                }
+                else
+                {
+                    _textViewPressure_dif.SetTextColor(Android.Graphics.Color.White);
+                }
+            }
+        }
+
+        private double _lightLevel_dif;
+        public double LightLevel_dif
+        {
+            get { return _lightLevel_dif; }
+            set
+            {
+                _lightLevel_dif = value;
+                _textViewLightLevel_dif.Text = value.ToString() + " lux";
+                if (value > 0)
+                {
+                    _textViewLightLevel_dif.SetTextColor(Android.Graphics.Color.Green);
+                }
+                else if (value < 0)
+                {
+                    _textViewLightLevel_dif.SetTextColor(Android.Graphics.Color.Red);
+                }
+                else
+                {
+                    _textViewLightLevel_dif.SetTextColor(Android.Graphics.Color.White);
+                }
+            }
+        }
+
+
+
     }
 }

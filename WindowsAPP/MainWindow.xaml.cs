@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Timers;
 using System.Windows;
+using System.Windows.Media;
 using FireSharp.Config;
 using FireSharp.Interfaces;
 using FireSharp.Response;
@@ -21,6 +22,80 @@ namespace WindowsAPP
         private IFirebaseClient client;
 
         private System.Timers.Timer timer = new System.Timers.Timer();
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            DataContext = this;
+
+            // Initialize Firebase client
+            client = new FireSharp.FirebaseClient(config);
+
+            if (client != null)
+            {
+                // Set up the timer
+                timer.Interval = 1000; // 1 second
+                timer.Elapsed += Timer_Elapsed;
+                timer.Start();
+            }
+            else
+            {
+                MessageBox.Show("Failed to connect to Firebase Realtime Database");
+            }
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            // Update the current time property with the current date and time
+            CurrentTime = DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss");
+
+            // Retrieve values from Firebase Realtime Database
+            FirebaseResponse response = client.Get("RealTime");
+            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
+
+            // Update properties with real-time data
+            Temperature = $"{data["Temperature"]}";
+            Humidity = $"{data["Humidity"]}";
+            Pressure = $"{data["Pressure"]}";
+            LightLevel = $"{data["LightLevel"]}";
+
+            // Retrieve values from Firebase Realtime Database for saved data
+            response = client.Get("Save");
+            Dictionary<string, string> data2 = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
+
+            // Update properties with saved data
+            SavedTime = "Latest Save: " + data2["Time"];
+            savedVals = $"Save:\nTemperature: {data2["Temperature"]} °C\nHumidity: {data2["Humidity"]}%\nPressure: {data2["Pressure"]} hPa\nLight level: {data2["LightLevel"]} lux";
+
+            // Calculate differences and update properties
+            Temperature_Dif = float.Parse(data["Temperature"]) - float.Parse(data2["Temperature"]);
+            Humidity_Dif = float.Parse(data["Humidity"]) - float.Parse(data2["Humidity"]);
+            Pressure_Dif = float.Parse(data["Pressure"]) - float.Parse(data2["Pressure"]);
+            LightLevel_Dif = float.Parse(data["LightLevel"]) - float.Parse(data2["LightLevel"]);
+        }
+
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            FirebaseResponse response = client.Get("RealTime");
+            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
+            client.Set("Save", data);
+            client.Set("Save/Time", DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss"));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
+
+
+        // getters and setters
+
+
+
 
         private double temperature;
         public string Temperature
@@ -88,56 +163,147 @@ namespace WindowsAPP
             get { return currentTime; }
             set
             {
-                if (currentTime != value)
-                {
-                    currentTime = value;
+                    currentTime = "Last update: "+value;
                     OnPropertyChanged("CurrentTime");
+            }
+        }
+
+        // Property for SavedTime
+        private string _savedTime;
+        public string SavedTime
+        {
+            get { return _savedTime; }
+            set
+            {
+                _savedTime = value;
+                OnPropertyChanged("SavedTime");
+            }
+        }
+
+        // Property for savedVals
+        private string _savedVals;
+        public string savedVals
+        {
+            get { return _savedVals; }
+            set
+            {
+                _savedVals = value;
+                OnPropertyChanged("savedVals");
+            }
+        }
+
+        private double _temperature_Dif;
+        public double Temperature_Dif
+        {
+            get { return _temperature_Dif; }
+            set
+            {
+                if (_temperature_Dif != value)
+                {
+                    _temperature_Dif = value;
+                    OnPropertyChanged(nameof(Temperature_Dif));
+                    OnPropertyChanged(nameof(Temperature_DifTextColor));
                 }
             }
         }
 
-
-        public MainWindow()
+        private double _humidity_Dif;
+        public double Humidity_Dif
         {
-            InitializeComponent();
-            DataContext = this;
-
-            // Initialize Firebase client
-            client = new FireSharp.FirebaseClient(config);
-
-            if (client != null)
+            get { return _humidity_Dif; }
+            set
             {
-                // Set up the timer
-                timer.Interval = 1000; // 1 second
-                timer.Elapsed += Timer_Elapsed;
-                timer.Start();
-            }
-            else
-            {
-                MessageBox.Show("Failed to connect to Firebase Realtime Database");
+                if (_humidity_Dif != value)
+                {
+                    _humidity_Dif = value;
+                    OnPropertyChanged(nameof(Humidity_Dif));
+                    OnPropertyChanged(nameof(Humidity_DifTextColor));
+                }
             }
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private double _pressure_Dif;
+        public double Pressure_Dif
         {
-
-            // Update the current time property with the current date and time
-            CurrentTime = DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss");
-
-            // Retrieve values from Firebase Realtime Database
-            FirebaseResponse response = client.Get("RealTime");
-            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
-
-            Temperature = $"{data["Temperature"]}";
-            Humidity = $"{data["Humidity"]}";
-            Pressure = $"{data["Pressure"]}";
-            LightLevel = $"{data["LightLevel"]}";
+            get { return _pressure_Dif; }
+            set
+            {
+                if (_pressure_Dif != value)
+                {
+                    _pressure_Dif = value;
+                    OnPropertyChanged(nameof(Pressure_Dif));
+                    OnPropertyChanged(nameof(Pressure_DifTextColor));
+                }
+            }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
+        private double _lightLevel_Dif;
+        public double LightLevel_Dif
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get { return _lightLevel_Dif; }
+            set
+            {
+                if (_lightLevel_Dif != value)
+                {
+                    _lightLevel_Dif = value;
+                    OnPropertyChanged(nameof(LightLevel_Dif));
+                    OnPropertyChanged(nameof(LightLevel_DifTextColor));
+                }
+            }
         }
+
+        public SolidColorBrush Temperature_DifTextColor
+        {
+            get
+            {
+                if (Temperature_Dif > 0)
+                    return new SolidColorBrush(Colors.Green);
+                else if (Temperature_Dif < 0)
+                    return new SolidColorBrush(Colors.Red);
+                else
+                    return new SolidColorBrush(Colors.White);
+            }
+        }
+
+        public SolidColorBrush Humidity_DifTextColor
+        {
+            get
+            {
+                if (Humidity_Dif > 0)
+                    return new SolidColorBrush(Colors.Green);
+                else if (Humidity_Dif < 0)
+                    return new SolidColorBrush(Colors.Red);
+                else
+                    return new SolidColorBrush(Colors.White);
+            }
+        }
+
+        public SolidColorBrush Pressure_DifTextColor
+        {
+            get
+            {
+                if (Pressure_Dif > 0)
+                    return new SolidColorBrush(Colors.Green);
+                else if (Pressure_Dif < 0)
+                    return new SolidColorBrush(Colors.Red);
+                else
+                    return new SolidColorBrush(Colors.White);
+            }
+        }
+
+        public SolidColorBrush LightLevel_DifTextColor
+        {
+            get
+            {
+                if (LightLevel_Dif > 0)
+                    return new SolidColorBrush(Colors.Green);
+                else if (LightLevel_Dif < 0)
+                    return new SolidColorBrush(Colors.Red);
+                else
+                    return new SolidColorBrush(Colors.White);
+            }
+        }
+
+
     }
 }

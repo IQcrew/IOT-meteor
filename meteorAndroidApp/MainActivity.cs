@@ -82,34 +82,38 @@ namespace meteorAndroidApp
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             // Update TextViews with new values every second
+
+            // RunOnUiThread method ensures that the code inside the lambda expression is executed on the UI thread
             RunOnUiThread(() =>
             {
+                // Fetch data from Firebase for "RealTime" node
                 FirebaseResponse response = client.Get("RealTime");
                 Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
+
+                // Update TextViews with fetched data
                 _textViewTemperature.Text = "Temperature:\n" + data["Temperature"] + " °C";
                 _textViewHumidity.Text = "Humidity:\n" + data["Humidity"] + " %";
                 _textViewPressure.Text = "Pressure:\n" + data["Pressure"] + " hPa";
                 _textViewLightLevel.Text = "Light level:\n" + data["LightLevel"] + " lux";
 
-
+                // Fetch data from Firebase for "Save" node
                 FirebaseResponse response2 = client.Get("Save");
                 Dictionary<string, string> data2 = JsonConvert.DeserializeObject<Dictionary<string, string>>(response2.Body.ToString());
 
+                // Calculate difference in values between "RealTime" and "Save" nodes
                 Temperature_dif = float.Parse(data["Temperature"]) - float.Parse(data2["Temperature"]);
                 Humidity_dif = float.Parse(data["Humidity"]) - float.Parse(data2["Humidity"]);
                 Pressure_dif = float.Parse(data["Pressure"]) - float.Parse(data2["Pressure"]);
                 LightLevel_dif = float.Parse(data["LightLevel"]) - float.Parse(data2["LightLevel"]);
 
-
-
+                // Update TextViews with calculated differences and current time
                 timeShower.Text = $"Latest Update:   {DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss")}\nLatest Save:   {data2["Time"]}";
                 text6.Text = $"Save:\nTemperature: {data2["Temperature"]} °C\nHumidity: {data2["Humidity"]}%\nPressure: {data2["Pressure"]} hPa\nLight level: {data2["LightLevel"]} lux";
-
-
             });
         }
 
-        
+
+
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
@@ -153,6 +157,7 @@ namespace meteorAndroidApp
 
         }
 
+        //getters and setters
 
         private double _temperature_dif;
         public double Temperature_dif

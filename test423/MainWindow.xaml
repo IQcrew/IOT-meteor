@@ -1,0 +1,22 @@
+﻿<Window x:Class="Wpf.CartesianChart.SolidColorChart.SolidColorExample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Wpf.CartesianChart.SolidColorChart"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600"
+             >
+    <Grid>
+        <lvc:CartesianChart Name="Chart" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="15">
+            <lvc:CartesianChart.Series>
+                <lvc:LineSeries Values="{Binding Values}" LineSmoothness="1" StrokeThickness="10" 
+                                DataLabels="True" FontSize="20"
+                                Stroke="Green"  PointGeometrySize="0"/>
+            </lvc:CartesianChart.Series>
+            
+        </lvc:CartesianChart>
+        
+    </Grid>
+</Window>

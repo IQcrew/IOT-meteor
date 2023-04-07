@@ -82,6 +82,21 @@ namespace WindowsAPP
             }
         }
 
+        private string currentTime;
+        public string CurrentTime
+        {
+            get { return currentTime; }
+            set
+            {
+                if (currentTime != value)
+                {
+                    currentTime = value;
+                    OnPropertyChanged("CurrentTime");
+                }
+            }
+        }
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -105,6 +120,10 @@ namespace WindowsAPP
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+
+            // Update the current time property with the current date and time
+            CurrentTime = DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss");
+
             // Retrieve values from Firebase Realtime Database
             FirebaseResponse response = client.Get("RealTime");
             Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());

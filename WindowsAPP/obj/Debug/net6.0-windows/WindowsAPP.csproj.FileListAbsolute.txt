@@ -26,3 +26,5 @@ C:\IT\Programovanie_amater\spsit\ulohy\IOT-meteor\WindowsAPP\bin\Debug\net6.0-wi
 C:\IT\Programovanie_amater\spsit\ulohy\IOT-meteor\WindowsAPP\bin\Debug\net6.0-windows\System.Net.Http.Primitives.dll
 C:\IT\Programovanie_amater\spsit\ulohy\IOT-meteor\WindowsAPP\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
 C:\IT\Programovanie_amater\spsit\ulohy\IOT-meteor\WindowsAPP\obj\Debug\net6.0-windows\WindowsAPP.csproj.CopyComplete
+C:\IT\Programovanie_amater\spsit\ulohy\IOT-meteor\WindowsAPP\bin\Debug\net6.0-windows\LiveCharts.dll
+C:\IT\Programovanie_amater\spsit\ulohy\IOT-meteor\WindowsAPP\bin\Debug\net6.0-windows\LiveCharts.Wpf.dll

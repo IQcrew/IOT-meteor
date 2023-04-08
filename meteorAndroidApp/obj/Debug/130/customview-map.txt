@@ -23,6 +23,7 @@ foreground;obj\Debug\130\res\mipmap-anydpi-v26\ic_launcher_round.xml
 gradient;obj\Debug\130\res\drawable\modern_background.xml
 GradientDrawable;obj\Debug\130\res\drawable\modern_background.xml
 ImageView;obj\Debug\130\res\layout\activity_main.xml
+item;obj\Debug\130\res\layout\activity_main.xml
 item;obj\Debug\130\res\menu\menu_main.xml
 item;obj\Debug\130\res\values\styles.xml
 LinearLayout;obj\Debug\130\res\layout\activity_main.xml
@@ -32,6 +33,7 @@ margin;obj\Debug\130\res\drawable\rounded_backgroundl.xml
 margin;obj\Debug\130\res\drawable\rounded_backgroundp.xml
 margin;obj\Debug\130\res\drawable\rounded_backgroundt.xml
 menu;obj\Debug\130\res\menu\menu_main.xml
+Menu;obj\Debug\130\res\layout\activity_main.xml
 padding;obj\Debug\130\res\drawable\rounded_background.xml
 padding;obj\Debug\130\res\drawable\rounded_backgroundh.xml
 padding;obj\Debug\130\res\drawable\rounded_backgroundl.xml

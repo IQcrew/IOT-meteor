@@ -5,6 +5,7 @@ using System.Threading;
 using System.Timers;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 using FireSharp.Config;
 using FireSharp.Interfaces;
 using FireSharp.Response;
@@ -22,34 +23,48 @@ namespace WindowsAPP
         private IFirebaseClient client;
 
         private System.Timers.Timer timer = new System.Timers.Timer();
-
+        DispatcherTimer dispatcherTimer;
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
 
-            // Initialize Firebase client
-            client = new FireSharp.FirebaseClient(config);
+            TemperatureName = temperatureName;
+            HumidityName = humidityName;
+            PressureName = pressureName;
+            LightLevelName = lightLevelName;
+            ButtonText = buttonText;
 
-            if (client != null)
+            try
             {
-                // Set up the timer
-                timer.Interval = 1000; // 1 second
-                timer.Elapsed += Timer_Elapsed;
-                timer.Start();
+                // Initialize Firebase client
+                client = new FireSharp.FirebaseClient(config);
+                dispatcherTimer = new DispatcherTimer();
+                dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+                dispatcherTimer.Tick += new EventHandler(Timer_Elapsed);
+                dispatcherTimer.Start();
             }
-            else
-            {
-                MessageBox.Show("Failed to connect to Firebase Realtime Database");
-            }
+            catch (Exception ex) { }
+
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+
+        string temperatureName = "Temperature"; // Custom name for temperature
+        string humidityName = "Humidity"; // Custom name for humidity
+        string pressureName = "Pressure"; // Custom name for pressure
+        string lightLevelName = "Light Level"; // Custom name for light level
+        string saveName = "Save"; // Custom name for saved data
+        string latestSaveName = "Latest save"; // Custom name for latest saved data
+        string latestUpdateName = "Latest update";
+        string buttonText = "Save current values";
+
+
+        private void Timer_Elapsed(object sender, EventArgs e)
         {
             // Update the current time property with the current date and time
             CurrentTime = DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss");
 
-            // Retrieve values from Firebase Realtime Database
+            // Retrieve values from Firebase Realtime Database for real-time data
             FirebaseResponse response = client.Get("RealTime");
             Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
 
@@ -64,8 +79,8 @@ namespace WindowsAPP
             Dictionary<string, string> data2 = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
 
             // Update properties with saved data
-            SavedTime = "Latest Save: " + data2["Time"];
-            savedVals = $"Save:\nTemperature: {data2["Temperature"]} °C\nHumidity: {data2["Humidity"]}%\nPressure: {data2["Pressure"]} hPa\nLight level: {data2["LightLevel"]} lux";
+            SavedTime = $"{latestSaveName}: {data2["Time"]}";
+            savedVals = $"{saveName}:\n{temperatureName}: {data2["Temperature"]} °C\n{humidityName}: {data2["Humidity"]}%\n{pressureName}: {data2["Pressure"]} hPa\n{lightLevelName}: {data2["LightLevel"]} lux";
 
             // Calculate differences and update properties
             Temperature_Dif = float.Parse(data["Temperature"]) - float.Parse(data2["Temperature"]);
@@ -73,6 +88,7 @@ namespace WindowsAPP
             Pressure_Dif = float.Parse(data["Pressure"]) - float.Parse(data2["Pressure"]);
             LightLevel_Dif = float.Parse(data["LightLevel"]) - float.Parse(data2["LightLevel"]);
         }
+
 
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -88,6 +104,45 @@ namespace WindowsAPP
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        private void languageEnglish_Click(object sender, RoutedEventArgs e)
+        {
+            temperatureName = "Temperature"; // Custom name for temperature
+            humidityName = "Humidity"; // Custom name for humidity
+            pressureName = "Pressure"; // Custom name for pressure
+            lightLevelName = "Light Level"; // Custom name for light level
+            saveName = "Save"; // Custom name for saved data
+            latestSaveName = "Latest Save"; // Custom name for latest saved data
+            buttonText = "Save current values"; // Custom name for button text
+            latestUpdateName = "Latest update";
+
+            TemperatureName = temperatureName;
+            HumidityName = humidityName;
+            PressureName = pressureName;
+            LightLevelName = lightLevelName;
+            ButtonText = buttonText;
+            Timer_Elapsed(null, null);
+        }
+
+        private void languageSlovak_Click(object sender, RoutedEventArgs e)
+        {
+            temperatureName = "Teplota"; // Custom name for temperature
+            humidityName = "Vlhkosť"; // Custom name for humidity
+            pressureName = "Tlak"; // Custom name for pressure
+            lightLevelName = "Úroveň svetla"; // Custom name for light level
+            saveName = "Uložené"; // Custom name for saved data
+            latestSaveName = "Najnovšie uložené"; // Custom name for latest saved data
+            buttonText = "Uložiť aktuálne hodnoty"; // Custom name for button text
+            latestUpdateName = "Posledný update";
+
+            TemperatureName = temperatureName;
+            HumidityName = humidityName;
+            PressureName = pressureName;
+            LightLevelName = lightLevelName;
+            ButtonText = buttonText;
+            Timer_Elapsed(null, null);
+        }
+
 
 
 
@@ -163,7 +218,7 @@ namespace WindowsAPP
             get { return currentTime; }
             set
             {
-                    currentTime = "Last update: "+value;
+                    currentTime = $"{latestUpdateName}: "+value;
                     OnPropertyChanged("CurrentTime");
             }
         }
@@ -251,7 +306,74 @@ namespace WindowsAPP
                 }
             }
         }
+        private string _temperatureName;
+        public string TemperatureName
+        {
+            get { return _temperatureName; }
+            set
+            {
+                if (_temperatureName != value)
+                {
+                    _temperatureName = $"{value}: ";
+                    OnPropertyChanged(nameof(TemperatureName));
+                }
+            }
+        }
 
+        private string _humidityName;
+        public string HumidityName
+        {
+            get { return _humidityName; }
+            set
+            {
+                if (_humidityName != value)
+                {
+                    _humidityName = $"{value}: ";
+                    OnPropertyChanged(nameof(HumidityName));
+                }
+            }
+        }
+
+        private string _pressureName;
+        public string PressureName
+        {
+            get { return _pressureName; }
+            set
+            {
+                if (_pressureName != value)
+                {
+                    _pressureName = $"{value}: ";
+                    OnPropertyChanged(nameof(PressureName));
+                }
+            }
+        }
+
+        private string _lightLevelName;
+        public string LightLevelName
+        {
+            get { return _lightLevelName; }
+            set
+            {
+                if (_lightLevelName != value)
+                {
+                    _lightLevelName = $"{value}: ";
+                    OnPropertyChanged(nameof(LightLevelName));
+                }
+            }
+        }
+        private string _buttonText;
+        public string ButtonText
+        {
+            get { return _buttonText; }
+            set
+            {
+                if (_buttonText != value)
+                {
+                    _buttonText = value;
+                    OnPropertyChanged(nameof(ButtonText));
+                }
+            }
+        }
         public SolidColorBrush Temperature_DifTextColor
         {
             get

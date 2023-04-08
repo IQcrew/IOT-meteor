@@ -23,6 +23,9 @@ namespace meteorAndroidApp
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
+
+        string language = "en";
+
         private IFirebaseConfig config = new FireSharp.Config.FirebaseConfig
         {
             AuthSecret = "T2zlocY55s02hfu8EPfYXUHpsgb2EvvFCffhVoEh",
@@ -36,11 +39,13 @@ namespace meteorAndroidApp
         private TextView _textViewLightLevel;
         private TextView timeShower;
         private TextView text6;
+        private TextView text7;
         private Timer _timer;
         private TextView _textViewTemperature_dif;
         private TextView _textViewHumidity_dif;
         private TextView _textViewPressure_dif;
         private TextView _textViewLightLevel_dif;
+        private Button btn;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -61,11 +66,12 @@ namespace meteorAndroidApp
             _textViewLightLevel = FindViewById<TextView>(Resource.Id.textView4);
             timeShower = FindViewById<TextView>(Resource.Id.textView5);
             text6 = FindViewById<TextView>(Resource.Id.textView6);
-            // Find TextViews by their IDs
+            text7 = FindViewById<TextView>(Resource.Id.textView7);
             _textViewTemperature_dif = FindViewById<TextView>(Resource.Id.textView8);
             _textViewHumidity_dif = FindViewById<TextView>(Resource.Id.textView9);
             _textViewPressure_dif = FindViewById<TextView>(Resource.Id.textView10);
             _textViewLightLevel_dif = FindViewById<TextView>(Resource.Id.textView11);
+            btn = FindViewById<Button>(Resource.Id.button1);
 
             // Initialize timer with 1 second interval+firebase
             try
@@ -79,6 +85,15 @@ namespace meteorAndroidApp
             catch (System.Exception ex) { }
         }
 
+        string temperatureName = "Temperature"; // Custom name for temperature
+        string humidityName = "Humidity"; // Custom name for humidity
+        string pressureName = "Pressure"; // Custom name for pressure
+        string lightLevelName = "Light Level"; // Custom name for light level
+        string saveName = "Save"; // Custom name for saved data
+        string latestSaveName = "Latest save"; // Custom name for latest saved data
+        string latestUpdateName = "Latest update";
+
+
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             // Update TextViews with new values every second
@@ -91,10 +106,10 @@ namespace meteorAndroidApp
                 Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
 
                 // Update TextViews with fetched data
-                _textViewTemperature.Text = "Temperature:\n" + data["Temperature"] + " °C";
-                _textViewHumidity.Text = "Humidity:\n" + data["Humidity"] + " %";
-                _textViewPressure.Text = "Pressure:\n" + data["Pressure"] + " hPa";
-                _textViewLightLevel.Text = "Light level:\n" + data["LightLevel"] + " lux";
+                _textViewTemperature.Text = $"{temperatureName}:\n" + data["Temperature"] + " °C";
+                _textViewHumidity.Text = $"{humidityName}:\n" + data["Humidity"] + " %";
+                _textViewPressure.Text = $"{pressureName}:\n" + data["Pressure"] + " hPa";
+                _textViewLightLevel.Text = $"{lightLevelName}:\n" + data["LightLevel"] + " lux";
 
                 // Fetch data from Firebase for "Save" node
                 FirebaseResponse response2 = client.Get("Save");
@@ -107,13 +122,39 @@ namespace meteorAndroidApp
                 LightLevel_dif = float.Parse(data["LightLevel"]) - float.Parse(data2["LightLevel"]);
 
                 // Update TextViews with calculated differences and current time
-                timeShower.Text = $"Latest Update:   {DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss")}\nLatest Save:   {data2["Time"]}";
-                text6.Text = $"Save:\nTemperature: {data2["Temperature"]} °C\nHumidity: {data2["Humidity"]}%\nPressure: {data2["Pressure"]} hPa\nLight level: {data2["LightLevel"]} lux";
+                timeShower.Text = $"{latestUpdateName}:   {DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss")}\n{latestSaveName}:   {data2["Time"]}";
+                text6.Text = $"{saveName}:\n{temperatureName}: {data2["Temperature"]} °C\n{humidityName}: {data2["Humidity"]}%\n{pressureName}: {data2["Pressure"]} hPa\n{lightLevelName}: {data2["LightLevel"]} lux";
             });
         }
 
 
+        private void languageEnglish()
+        {
+            temperatureName = "Temperature"; // Custom name for temperature
+            humidityName = "Humidity"; // Custom name for humidity
+            pressureName = "Pressure"; // Custom name for pressure
+            lightLevelName = "Light Level"; // Custom name for light level
+            saveName = "Save"; // Custom name for saved data
+            latestSaveName = "Latest Save"; // Custom name for latest saved data
+            latestUpdateName = "Latest update";
+            text7.Text = "Relative change:";
+            btn.Text = "Save current values";
+            Timer_Elapsed(null, null);
+        }
 
+        private void languageSlovak()
+        {
+            temperatureName = "Teplota"; // Custom name for temperature
+            humidityName = "Vlhkosť"; // Custom name for humidity
+            pressureName = "Tlak"; // Custom name for pressure
+            lightLevelName = "Úroveň svetla"; // Custom name for light level
+            saveName = "Uložené"; // Custom name for saved data
+            latestSaveName = "Najnovšie uložené"; // Custom name for latest saved data
+            latestUpdateName = "Posledný update";
+            text7.Text = "Zmena:";
+            btn.Text = "Uložiť aktúalne hodnoty";
+            Timer_Elapsed(null, null);
+        }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
@@ -123,14 +164,21 @@ namespace meteorAndroidApp
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            int id = item.ItemId;
-            if (id == Resource.Id.action_settings)
+            switch (language)
             {
-                return true;
+                case "sk":
+                    languageEnglish();
+                    language = "en";
+                    break;
+                default:
+                    languageSlovak();
+                    language = "sk";
+                    break;
             }
 
             return base.OnOptionsItemSelected(item);
         }
+
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

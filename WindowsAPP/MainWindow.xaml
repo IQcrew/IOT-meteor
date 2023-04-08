@@ -27,7 +27,7 @@
 
 
             <!-- Button -->
-            <Button Content="Save current values" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,25,10" FontFamily="Your Font Family" FontSize="18" Click="SaveButton_Click" >
+            <Button Content="Save current values" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,25,10" FontFamily="Bahnschrift Condensed" FontSize="18" Click="SaveButton_Click" >
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="Background" Value="#0078D7"/>
@@ -68,7 +68,7 @@
             </Button>
 
             <!-- Second Label -->
-            <Label Content="{Binding savedVals}" HorizontalAlignment="Right" Panel.ZIndex="1" VerticalAlignment="Bottom" Margin="0,0,218,10" FontFamily="Your Font Family" Foreground="White" FontSize="18" />
+            <Label Content="{Binding savedVals}" HorizontalAlignment="Right" Panel.ZIndex="1" VerticalAlignment="Bottom" Margin="0,0,218,10" FontFamily="Bahnschrift Condensed" Foreground="White" FontSize="18" />
 
 
 

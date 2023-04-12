@@ -83,10 +83,10 @@ namespace WindowsAPP
             savedVals = $"{saveName}:\n{temperatureName}: {data2["Temperature"]} °C\n{humidityName}: {data2["Humidity"]}%\n{pressureName}: {data2["Pressure"]} hPa\n{lightLevelName}: {data2["LightLevel"]} lux";
 
             // Calculate differences and update properties
-            Temperature_Dif = float.Parse(data["Temperature"]) - float.Parse(data2["Temperature"]);
-            Humidity_Dif = float.Parse(data["Humidity"]) - float.Parse(data2["Humidity"]);
-            Pressure_Dif = float.Parse(data["Pressure"]) - float.Parse(data2["Pressure"]);
-            LightLevel_Dif = float.Parse(data["LightLevel"]) - float.Parse(data2["LightLevel"]);
+            Temperature_Dif = Math.Round(float.Parse(data["Temperature"]) - float.Parse(data2["Temperature"]), 2);
+            Humidity_Dif = Math.Round(float.Parse(data["Humidity"]) - float.Parse(data2["Humidity"]), 2);
+            Pressure_Dif = Math.Round(float.Parse(data["Pressure"]) - float.Parse(data2["Pressure"]), 2);
+            LightLevel_Dif = Math.Round(float.Parse(data["LightLevel"]) - float.Parse(data2["LightLevel"]), 2);
         }
 
 

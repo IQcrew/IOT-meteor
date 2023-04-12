@@ -116,10 +116,11 @@ namespace meteorAndroidApp
                 Dictionary<string, string> data2 = JsonConvert.DeserializeObject<Dictionary<string, string>>(response2.Body.ToString());
 
                 // Calculate difference in values between "RealTime" and "Save" nodes
-                Temperature_dif = float.Parse(data["Temperature"]) - float.Parse(data2["Temperature"]);
-                Humidity_dif = float.Parse(data["Humidity"]) - float.Parse(data2["Humidity"]);
-                Pressure_dif = float.Parse(data["Pressure"]) - float.Parse(data2["Pressure"]);
-                LightLevel_dif = float.Parse(data["LightLevel"]) - float.Parse(data2["LightLevel"]);
+                Temperature_dif = System.Math.Round(float.Parse(data["Temperature"]) - float.Parse(data2["Temperature"]), 2);
+                Humidity_dif = System.Math.Round(float.Parse(data["Humidity"]) - float.Parse(data2["Humidity"]), 2);
+                Pressure_dif = System.Math.Round(float.Parse(data["Pressure"]) - float.Parse(data2["Pressure"]), 2);
+                LightLevel_dif = System.Math.Round(float.Parse(data["LightLevel"]) - float.Parse(data2["LightLevel"]), 2);
+
 
                 // Update TextViews with calculated differences and current time
                 timeShower.Text = $"{latestUpdateName}:   {DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss")}\n{latestSaveName}:   {data2["Time"]}";

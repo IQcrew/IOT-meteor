@@ -28,8 +28,8 @@ namespace meteorAndroidApp
 
         private IFirebaseConfig config = new FireSharp.Config.FirebaseConfig
         {
-            AuthSecret = "T2zlocY55s02hfu8EPfYXUHpsgb2EvvFCffhVoEh",
-            BasePath = "https://mete-e384b-default-rtdb.europe-west1.firebasedatabase.app"
+            AuthSecret = "92Avq34xTQN38jJarUvcfrj7mzpHOzXj6HenJSOd",
+            BasePath = "https://iot-meteorologicka-stanica-default-rtdb.europe-west1.firebasedatabase.app"
         };
         private IFirebaseClient client;
 

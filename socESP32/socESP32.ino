@@ -9,10 +9,10 @@
 //firebase
 #include <WiFi.h>                                                
 #include <IOXhop_FirebaseESP32.h>  
-#define FIREBASE_Host "https://mete-e384b-default-rtdb.europe-west1.firebasedatabase.app"                   // replace with your Firebase Host
-#define FIREBASE_authorization_key "T2zlocY55s02hfu8EPfYXUHpsgb2EvvFCffhVoEh" // replace with your secret key
-#define WIFI_SSID ""       // replace with your SSID
-#define WIFI_PASSWORD ""          //replace with your Password
+#define FIREBASE_Host "https://iot-meteorologicka-stanica-default-rtdb.europe-west1.firebasedatabase.app"                   // replace with your Firebase Host
+#define FIREBASE_authorization_key "92Avq34xTQN38jJarUvcfrj7mzpHOzXj6HenJSOd" // replace with your secret key
+#define WIFI_SSID "IT-IQ-CREW24"       // replace with your SSID
+#define WIFI_PASSWORD "hackedBYdudesek"          //replace with your Password
 
 
 
@@ -82,7 +82,7 @@ void loop() {
   lcd.print(humidityValue);
   lcd.print(" P:");
   lcd.print(pressureValue);
-
+  
   Firebase.setString("RealTime/Temperature", String(temperatureValue));  
   Firebase.setString("RealTime/Humidity", String(humidityValue));
   Firebase.setString("RealTime/Pressure", String(pressureValue));

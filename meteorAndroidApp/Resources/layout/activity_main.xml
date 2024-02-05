@@ -53,6 +53,18 @@
             android:layout_marginTop="20.0dp" />
 
         <TextView
+            android:text="Pressure:\n"
+            android:background="@drawable/rounded_backgroundP"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/textView3"
+            android:textColor="#ffffffff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:layout_marginTop="20.0dp" />
+        <TextView
             android:text="Humidity:\n"
             android:background="@drawable/rounded_backgroundH"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -65,18 +77,6 @@
             android:padding="5dp"
             android:layout_marginTop="20.0dp" />
 
-        <TextView
-            android:text="Pressure:\n"
-            android:background="@drawable/rounded_backgroundP"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/textView3"
-            android:textColor="#ffffffff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:layout_marginTop="20.0dp" />
 
         <TextView
             android:text="Light level:\n"

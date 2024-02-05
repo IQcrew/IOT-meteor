@@ -59,7 +59,6 @@ namespace meteorAndroidApp
             Button button = FindViewById<Button>(Resource.Id.button1);
             button.Click += OnButtonClicked;
 
-            // Find TextViews by their IDs
             _textViewTemperature = FindViewById<TextView>(Resource.Id.textView1);
             _textViewHumidity = FindViewById<TextView>(Resource.Id.textView2);
             _textViewPressure = FindViewById<TextView>(Resource.Id.textView3);
@@ -73,7 +72,6 @@ namespace meteorAndroidApp
             _textViewLightLevel_dif = FindViewById<TextView>(Resource.Id.textView11);
             btn = FindViewById<Button>(Resource.Id.button1);
 
-            // Initialize timer with 1 second interval+firebase
             try
             {
                 client = new FireSharp.FirebaseClient(config);
@@ -85,44 +83,37 @@ namespace meteorAndroidApp
             catch (System.Exception ex) { }
         }
 
-        string temperatureName = "Temperature"; // Custom name for temperature
-        string humidityName = "Humidity"; // Custom name for humidity
-        string pressureName = "Pressure"; // Custom name for pressure
-        string lightLevelName = "Light Level"; // Custom name for light level
-        string saveName = "Save"; // Custom name for saved data
-        string latestSaveName = "Latest save"; // Custom name for latest saved data
+        string temperatureName = "Temperature"; 
+        string humidityName = "Humidity"; 
+        string pressureName = "Pressure"; 
+        string lightLevelName = "Light Level";
+        string saveName = "Save";
+        string latestSaveName = "Latest save"; 
         string latestUpdateName = "Latest update";
 
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            // Update TextViews with new values every second
-
-            // RunOnUiThread method ensures that the code inside the lambda expression is executed on the UI thread
             RunOnUiThread(() =>
             {
-                // Fetch data from Firebase for "RealTime" node
+                //pravidelny update hodonot z databazy
                 FirebaseResponse response = client.Get("RealTime");
                 Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
 
-                // Update TextViews with fetched data
                 _textViewTemperature.Text = $"{temperatureName}:\n" + data["Temperature"] + " °C";
                 _textViewHumidity.Text = $"{humidityName}:\n" + data["Humidity"] + " %";
                 _textViewPressure.Text = $"{pressureName}:\n" + data["Pressure"] + " hPa";
                 _textViewLightLevel.Text = $"{lightLevelName}:\n" + data["LightLevel"] + " lux";
 
-                // Fetch data from Firebase for "Save" node
                 FirebaseResponse response2 = client.Get("Save");
                 Dictionary<string, string> data2 = JsonConvert.DeserializeObject<Dictionary<string, string>>(response2.Body.ToString());
 
-                // Calculate difference in values between "RealTime" and "Save" nodes
                 Temperature_dif = System.Math.Round(float.Parse(data["Temperature"]) - float.Parse(data2["Temperature"]), 2);
                 Humidity_dif = System.Math.Round(float.Parse(data["Humidity"]) - float.Parse(data2["Humidity"]), 2);
                 Pressure_dif = System.Math.Round(float.Parse(data["Pressure"]) - float.Parse(data2["Pressure"]), 2);
                 LightLevel_dif = System.Math.Round(float.Parse(data["LightLevel"]) - float.Parse(data2["LightLevel"]), 2);
 
 
-                // Update TextViews with calculated differences and current time
                 timeShower.Text = $"{latestUpdateName}:   {DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss")}\n{latestSaveName}:   {data2["Time"]}";
                 text6.Text = $"{saveName}:\n{temperatureName}: {data2["Temperature"]} °C\n{humidityName}: {data2["Humidity"]}%\n{pressureName}: {data2["Pressure"]} hPa\n{lightLevelName}: {data2["LightLevel"]} lux";
             });
@@ -131,12 +122,12 @@ namespace meteorAndroidApp
 
         private void languageEnglish()
         {
-            temperatureName = "Temperature"; // Custom name for temperature
-            humidityName = "Humidity"; // Custom name for humidity
-            pressureName = "Pressure"; // Custom name for pressure
-            lightLevelName = "Light Level"; // Custom name for light level
-            saveName = "Save"; // Custom name for saved data
-            latestSaveName = "Latest Save"; // Custom name for latest saved data
+            temperatureName = "Temperature"; 
+            humidityName = "Humidity"; 
+            pressureName = "Pressure";
+            lightLevelName = "Light Level"; 
+            saveName = "Save"; 
+            latestSaveName = "Latest Save";
             latestUpdateName = "Latest update";
             text7.Text = "Relative change:";
             btn.Text = "Save current values";
@@ -145,12 +136,12 @@ namespace meteorAndroidApp
 
         private void languageSlovak()
         {
-            temperatureName = "Teplota"; // Custom name for temperature
-            humidityName = "Vlhkosť"; // Custom name for humidity
-            pressureName = "Tlak"; // Custom name for pressure
-            lightLevelName = "Úroveň svetla"; // Custom name for light level
-            saveName = "Uložené"; // Custom name for saved data
-            latestSaveName = "Najnovšie uložené"; // Custom name for latest saved data
+            temperatureName = "Teplota"; 
+            humidityName = "Vlhkosť"; 
+            pressureName = "Tlak"; 
+            lightLevelName = "Úroveň svetla";
+            saveName = "Uložené";
+            latestSaveName = "Najnovšie uložené"; 
             latestUpdateName = "Posledný update";
             text7.Text = "Zmena:";
             btn.Text = "Uložiť aktúalne hodnoty";
@@ -191,7 +182,6 @@ namespace meteorAndroidApp
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            // Stop and dispose the timer when the activity is destroyed
             _timer.Stop();
             _timer.Dispose();
         }
@@ -206,7 +196,7 @@ namespace meteorAndroidApp
 
         }
 
-        //getters and setters
+        #region properties
 
         private double _temperature_dif;
         public double Temperature_dif
@@ -300,7 +290,7 @@ namespace meteorAndroidApp
             }
         }
 
-
+        #endregion
 
     }
 }

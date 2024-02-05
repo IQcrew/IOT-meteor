@@ -15,8 +15,8 @@
         <!-- Background -->
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#2C2C32" Offset="0"/>
-                <GradientStop Color="#1E1E24" Offset="1"/>
+                <GradientStop Color="#030025" Offset="0"/>
+                <GradientStop Color="#090088" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
         <Grid>
@@ -127,14 +127,14 @@
 
 
         <Button Width="50" Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,70" RenderTransformOrigin="0.529,0.506" Click="languageEnglish_Click">
-            <Image Source="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Square_Flag_of_the_United_Kingdom.svg/2048px-Square_Flag_of_the_United_Kingdom.svg.png" Stretch="UniformToFill" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            <Image Source="https://res.cloudinary.com/teepublic/image/private/s--lD6C1S8U--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_auto:good:420,w_630/v1588087401/production/designs/9584177_0.jpg" Stretch="UniformToFill" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
         </Button>
         <Button Width="50" Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,130" RenderTransformOrigin="0.529,0.506" Click="languageSlovak_Click">
             <Image Source="https://flagdownload.com/wp-content/uploads/Flag_of_Slovakia_Flat_Square-1024x1024.png" Stretch="UniformToFill" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
         </Button>
 
         <!-- Logo Image -->
-        <Image Source="https://cdn-icons-png.flaticon.com/512/1809/1809492.png" Stretch="Uniform" Height="280" VerticalAlignment="Center" HorizontalAlignment="Center" Width="280" Margin="300,0,0,0"/>
+        <Image Source="https://cdn1.iconfinder.com/data/icons/science-165/64/14-512.png" Stretch="Uniform" Height="280" VerticalAlignment="Center" HorizontalAlignment="Center" Width="280" Margin="300,0,0,0"/>
     </Grid>
 
 </Window>

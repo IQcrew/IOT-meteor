@@ -37,7 +37,6 @@ namespace WindowsAPP
 
             try
             {
-                // Initialize Firebase client
                 client = new FireSharp.FirebaseClient(config);
                 dispatcherTimer = new DispatcherTimer();
                 dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
@@ -49,40 +48,41 @@ namespace WindowsAPP
         }
 
 
-        string temperatureName = "Temperature"; // Custom name for temperature
-        string humidityName = "Humidity"; // Custom name for humidity
-        string pressureName = "Pressure"; // Custom name for pressure
-        string lightLevelName = "Light Level"; // Custom name for light level
-        string saveName = "Save"; // Custom name for saved data
-        string latestSaveName = "Latest save"; // Custom name for latest saved data
-        string latestUpdateName = "Latest update";
-        string buttonText = "Save current values";
+        // Názvy premenných pre údaje o teplote, vlhkosti, tlaku a úrovni svetla
+        string temperatureName = "Teplota";
+        string humidityName = "Vlhkosť";
+        string pressureName = "Tlak";
+        string lightLevelName = "Úroveň svetla";
+        string saveName = "Uložiť";
+        string latestSaveName = "Posledné uloženie";
+        string latestUpdateName = "Posledná aktualizácia";
+        string buttonText = "Uložiť aktuálne hodnoty";
 
-
+        // Obsluha udalosti príchodu časovača
         private void Timer_Elapsed(object sender, EventArgs e)
         {
-            // Update the current time property with the current date and time
+            // Aktuálny čas
             CurrentTime = DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss");
 
-            // Retrieve values from Firebase Realtime Database for real-time data
+            // Získanie údajov z reálneho času z databázy
             FirebaseResponse response = client.Get("RealTime");
             Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
 
-            // Update properties with real-time data
+            // Priradenie hodnôt teploty, vlhkosti, tlaku a úrovne svetla
             Temperature = $"{data["Temperature"]}";
             Humidity = $"{data["Humidity"]}";
             Pressure = $"{data["Pressure"]}";
             LightLevel = $"{data["LightLevel"]}";
 
-            // Retrieve values from Firebase Realtime Database for saved data
+            // Získanie údajov o poslednom uložení
             response = client.Get("Save");
             Dictionary<string, string> data2 = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
 
-            // Update properties with saved data
+            // Priradenie hodnôt pre čas posledného uloženia a uložených hodnôt
             SavedTime = $"{latestSaveName}: {data2["Time"]}";
             savedVals = $"{saveName}:\n{temperatureName}: {data2["Temperature"]} °C\n{humidityName}: {data2["Humidity"]}%\n{pressureName}: {data2["Pressure"]} hPa\n{lightLevelName}: {data2["LightLevel"]} lux";
 
-            // Calculate differences and update properties
+            // Výpočet a priradenie rozdielov teploty, vlhkosti, tlaku a úrovne svetla
             Temperature_Dif = Math.Round(float.Parse(data["Temperature"]) - float.Parse(data2["Temperature"]), 2);
             Humidity_Dif = Math.Round(float.Parse(data["Humidity"]) - float.Parse(data2["Humidity"]), 2);
             Pressure_Dif = Math.Round(float.Parse(data["Pressure"]) - float.Parse(data2["Pressure"]), 2);
@@ -91,65 +91,79 @@ namespace WindowsAPP
 
 
 
+
+        // Obsluha udalosti kliknutia na tlačidlo Uložiť
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            // Získanie údajov z reálneho času z databázy
             FirebaseResponse response = client.Get("RealTime");
             Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
+
+            // Uloženie aktuálnych údajov do databázy
             client.Set("Save", data);
+
+            // Uloženie aktuálneho času do databázy
             client.Set("Save/Time", DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss"));
         }
 
+        // Udalosť, ktorá signalizuje zmenu vlastnosti objektu
         public event PropertyChangedEventHandler PropertyChanged;
+
+        // Metóda na vyvolanie udalosti pri zmene vlastnosti
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        // Obsluha udalosti kliknutia na tlačidlo pre nastavenie angličtiny
         private void languageEnglish_Click(object sender, RoutedEventArgs e)
         {
-            temperatureName = "Temperature"; // Custom name for temperature
-            humidityName = "Humidity"; // Custom name for humidity
-            pressureName = "Pressure"; // Custom name for pressure
-            lightLevelName = "Light Level"; // Custom name for light level
-            saveName = "Save"; // Custom name for saved data
-            latestSaveName = "Latest Save"; // Custom name for latest saved data
-            buttonText = "Save current values"; // Custom name for button text
+            // Nastavenie názvov premenných a textov na anglický jazyk
+            temperatureName = "Temperature";
+            humidityName = "Humidity";
+            pressureName = "Pressure";
+            lightLevelName = "Light Level";
+            saveName = "Save";
+            latestSaveName = "Latest Save";
+            buttonText = "Save current values";
             latestUpdateName = "Latest update";
 
+            // Aktualizácia hodnôt pre grafické rozhranie
             TemperatureName = temperatureName;
             HumidityName = humidityName;
             PressureName = pressureName;
             LightLevelName = lightLevelName;
             ButtonText = buttonText;
+
+            // Aktualizácia hodnôt na základe zmeny jazyka
             Timer_Elapsed(null, null);
         }
 
+        // Obsluha udalosti kliknutia na tlačidlo pre nastavenie slovenčiny
         private void languageSlovak_Click(object sender, RoutedEventArgs e)
         {
-            temperatureName = "Teplota"; // Custom name for temperature
-            humidityName = "Vlhkosť"; // Custom name for humidity
-            pressureName = "Tlak"; // Custom name for pressure
-            lightLevelName = "Úroveň svetla"; // Custom name for light level
-            saveName = "Uložené"; // Custom name for saved data
-            latestSaveName = "Najnovšie uložené"; // Custom name for latest saved data
-            buttonText = "Uložiť aktuálne hodnoty"; // Custom name for button text
+            // Nastavenie názvov premenných a textov na slovenský jazyk
+            temperatureName = "Teplota";
+            humidityName = "Vlhkosť";
+            pressureName = "Tlak";
+            lightLevelName = "Úroveň svetla";
+            saveName = "Uložené";
+            latestSaveName = "Najnovšie uložené";
+            buttonText = "Uložiť aktuálne hodnoty";
             latestUpdateName = "Posledný update";
 
+            // Aktualizácia hodnôt pre grafické rozhranie
             TemperatureName = temperatureName;
             HumidityName = humidityName;
             PressureName = pressureName;
             LightLevelName = lightLevelName;
             ButtonText = buttonText;
+
+            // Aktualizácia hodnôt na základe zmeny jazyka
             Timer_Elapsed(null, null);
         }
 
-
-
-
-
-        // getters and setters
-
-
+        #region poperties
 
 
         private double temperature;
@@ -223,7 +237,6 @@ namespace WindowsAPP
             }
         }
 
-        // Property for SavedTime
         private string _savedTime;
         public string SavedTime
         {
@@ -235,7 +248,6 @@ namespace WindowsAPP
             }
         }
 
-        // Property for savedVals
         private string _savedVals;
         public string savedVals
         {
@@ -425,7 +437,7 @@ namespace WindowsAPP
                     return new SolidColorBrush(Colors.White);
             }
         }
-
+        #endregion
 
     }
 }

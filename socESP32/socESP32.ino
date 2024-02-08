@@ -11,8 +11,8 @@
 #include <IOXhop_FirebaseESP32.h>  
 #define FIREBASE_Host "https://iot-meteorologicka-stanica-default-rtdb.europe-west1.firebasedatabase.app"                   // replace with your Firebase Host
 #define FIREBASE_authorization_key "92Avq34xTQN38jJarUvcfrj7mzpHOzXj6HenJSOd" // replace with your secret key
-#define WIFI_SSID "IT-IQ-CREW24"       // replace with your SSID
-#define WIFI_PASSWORD "hackedBYdudesek"          //replace with your Password
+#define WIFI_SSID "meteor-net"       // replace with your SSID
+#define WIFI_PASSWORD "SOC2024"          //replace with your Password
 
 
 

@@ -10,6 +10,7 @@ using FireSharp.Config;
 using FireSharp.Interfaces;
 using FireSharp.Response;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace WindowsAPP
 {
@@ -21,7 +22,7 @@ namespace WindowsAPP
             BasePath = "https://iot-meteorologicka-stanica-default-rtdb.europe-west1.firebasedatabase.app"
         };
         private IFirebaseClient client;
-
+        CultureInfo culture = CultureInfo.InvariantCulture;
         private System.Timers.Timer timer = new System.Timers.Timer();
         DispatcherTimer dispatcherTimer;
         public MainWindow()
@@ -75,11 +76,13 @@ namespace WindowsAPP
             SavedTime = $"{latestSaveName}: {data2["Time"]}";
             savedVals = $"{saveName}:\n{temperatureName}: {data2["Temperature"]} °C\n{humidityName}: {data2["Humidity"]}%\n{pressureName}: {data2["Pressure"]} hPa\n{lightLevelName}: {data2["LightLevel"]} lux";
 
-            Temperature_Dif = Math.Round(float.Parse(data["Temperature"]) - float.Parse(data2["Temperature"]), 2);
-            Humidity_Dif = Math.Round(float.Parse(data["Humidity"]) - float.Parse(data2["Humidity"]), 2);
-            Pressure_Dif = Math.Round(float.Parse(data["Pressure"]) - float.Parse(data2["Pressure"]), 2);
-            LightLevel_Dif = Math.Round(float.Parse(data["LightLevel"]) - float.Parse(data2["LightLevel"]), 2);
+
+            Temperature_Dif = Math.Round(float.Parse(data["Temperature"], culture) - float.Parse(data2["Temperature"], culture), 2);
+            Humidity_Dif = Math.Round(float.Parse(data["Humidity"], culture) - float.Parse(data2["Humidity"], culture), 2);
+            Pressure_Dif = Math.Round(float.Parse(data["Pressure"], culture) - float.Parse(data2["Pressure"], culture), 2);
+            LightLevel_Dif = Math.Round(float.Parse(data["LightLevel"], culture) - float.Parse(data2["LightLevel"], culture), 2);
         }
+
 
 
 
@@ -151,12 +154,10 @@ namespace WindowsAPP
             get { return $"{Math.Round(temperature, 2)}°C"; }
             set
             {
-                double temp;
-                if (double.TryParse(value, out temp))
-                {
-                    temperature = temp;
-                    OnPropertyChanged("Temperature");
-                }
+
+                temperature = double.Parse(value, culture);
+                OnPropertyChanged("Temperature");
+
             }
         }
 
@@ -181,12 +182,10 @@ namespace WindowsAPP
             get { return $"{Math.Round(pressure, 2)} hPa"; }
             set
             {
-                double press;
-                if (double.TryParse(value, out press))
-                {
-                    pressure = press;
-                    OnPropertyChanged("Pressure");
-                }
+
+                pressure = double.Parse(value, culture);
+                OnPropertyChanged("Pressure");
+
             }
         }
 
@@ -211,8 +210,8 @@ namespace WindowsAPP
             get { return currentTime; }
             set
             {
-                    currentTime = $"{latestUpdateName}: "+value;
-                    OnPropertyChanged("CurrentTime");
+                currentTime = $"{latestUpdateName}: " + value;
+                OnPropertyChanged("CurrentTime");
             }
         }
 

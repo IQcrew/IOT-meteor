@@ -48,7 +48,6 @@ namespace WindowsAPP
         }
 
 
-        // Názvy premenných pre údaje o teplote, vlhkosti, tlaku a úrovni svetla
         string temperatureName = "Teplota";
         string humidityName = "Vlhkosť";
         string pressureName = "Tlak";
@@ -58,31 +57,24 @@ namespace WindowsAPP
         string latestUpdateName = "Posledná aktualizácia";
         string buttonText = "Uložiť aktuálne hodnoty";
 
-        // Obsluha udalosti príchodu časovača
         private void Timer_Elapsed(object sender, EventArgs e)
         {
-            // Aktuálny čas
             CurrentTime = DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss");
 
-            // Získanie údajov z reálneho času z databázy
             FirebaseResponse response = client.Get("RealTime");
             Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
 
-            // Priradenie hodnôt teploty, vlhkosti, tlaku a úrovne svetla
             Temperature = $"{data["Temperature"]}";
             Humidity = $"{data["Humidity"]}";
             Pressure = $"{data["Pressure"]}";
             LightLevel = $"{data["LightLevel"]}";
 
-            // Získanie údajov o poslednom uložení
             response = client.Get("Save");
             Dictionary<string, string> data2 = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
 
-            // Priradenie hodnôt pre čas posledného uloženia a uložených hodnôt
             SavedTime = $"{latestSaveName}: {data2["Time"]}";
             savedVals = $"{saveName}:\n{temperatureName}: {data2["Temperature"]} °C\n{humidityName}: {data2["Humidity"]}%\n{pressureName}: {data2["Pressure"]} hPa\n{lightLevelName}: {data2["LightLevel"]} lux";
 
-            // Výpočet a priradenie rozdielov teploty, vlhkosti, tlaku a úrovne svetla
             Temperature_Dif = Math.Round(float.Parse(data["Temperature"]) - float.Parse(data2["Temperature"]), 2);
             Humidity_Dif = Math.Round(float.Parse(data["Humidity"]) - float.Parse(data2["Humidity"]), 2);
             Pressure_Dif = Math.Round(float.Parse(data["Pressure"]) - float.Parse(data2["Pressure"]), 2);
@@ -92,33 +84,25 @@ namespace WindowsAPP
 
 
 
-        // Obsluha udalosti kliknutia na tlačidlo Uložiť
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Získanie údajov z reálneho času z databázy
             FirebaseResponse response = client.Get("RealTime");
             Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
 
-            // Uloženie aktuálnych údajov do databázy
             client.Set("Save", data);
 
-            // Uloženie aktuálneho času do databázy
             client.Set("Save/Time", DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss"));
         }
 
-        // Udalosť, ktorá signalizuje zmenu vlastnosti objektu
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // Metóda na vyvolanie udalosti pri zmene vlastnosti
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        // Obsluha udalosti kliknutia na tlačidlo pre nastavenie angličtiny
         private void languageEnglish_Click(object sender, RoutedEventArgs e)
         {
-            // Nastavenie názvov premenných a textov na anglický jazyk
             temperatureName = "Temperature";
             humidityName = "Humidity";
             pressureName = "Pressure";
@@ -128,21 +112,18 @@ namespace WindowsAPP
             buttonText = "Save current values";
             latestUpdateName = "Latest update";
 
-            // Aktualizácia hodnôt pre grafické rozhranie
             TemperatureName = temperatureName;
             HumidityName = humidityName;
             PressureName = pressureName;
             LightLevelName = lightLevelName;
             ButtonText = buttonText;
 
-            // Aktualizácia hodnôt na základe zmeny jazyka
             Timer_Elapsed(null, null);
         }
 
-        // Obsluha udalosti kliknutia na tlačidlo pre nastavenie slovenčiny
         private void languageSlovak_Click(object sender, RoutedEventArgs e)
         {
-            // Nastavenie názvov premenných a textov na slovenský jazyk
+
             temperatureName = "Teplota";
             humidityName = "Vlhkosť";
             pressureName = "Tlak";
@@ -152,14 +133,12 @@ namespace WindowsAPP
             buttonText = "Uložiť aktuálne hodnoty";
             latestUpdateName = "Posledný update";
 
-            // Aktualizácia hodnôt pre grafické rozhranie
             TemperatureName = temperatureName;
             HumidityName = humidityName;
             PressureName = pressureName;
             LightLevelName = lightLevelName;
             ButtonText = buttonText;
 
-            // Aktualizácia hodnôt na základe zmeny jazyka
             Timer_Elapsed(null, null);
         }
 

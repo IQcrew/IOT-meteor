@@ -114,7 +114,7 @@ namespace meteorAndroidApp
                 LightLevel_dif = System.Math.Round(float.Parse(data["LightLevel"]) - float.Parse(data2["LightLevel"]), 2);
 
 
-                timeShower.Text = $"{latestUpdateName}:   {DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss")}\n{latestSaveName}:   {data2["Time"]}";
+                timeShower.Text = $"{latestUpdateName}:   {DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}\n{latestSaveName}:   {data2["Time"]}";
                 text6.Text = $"{saveName}:\n{temperatureName}: {data2["Temperature"]} °C\n{humidityName}: {data2["Humidity"]}%\n{pressureName}: {data2["Pressure"]} hPa\n{lightLevelName}: {data2["LightLevel"]} lux";
             });
         }
@@ -191,7 +191,7 @@ namespace meteorAndroidApp
             FirebaseResponse response = client.Get("RealTime");
             Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
             client.Set("Save", data);
-            client.Set("Save/Time", DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss"));
+            client.Set("Save/Time", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
 
 
         }

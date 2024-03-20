@@ -1,6 +1,5 @@
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
-#include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <Q2HX711.h>
 #include <Average.h>
@@ -9,10 +8,10 @@
 //firebase
 #include <WiFi.h>                                                
 #include <IOXhop_FirebaseESP32.h>  
-#define FIREBASE_Host "https://iot-meteorologicka-stanica-default-rtdb.europe-west1.firebasedatabase.app"                   // replace with your Firebase Host
-#define FIREBASE_authorization_key "92Avq34xTQN38jJarUvcfrj7mzpHOzXj6HenJSOd" // replace with your secret key
+#define FIREBASE_Host "https://iot-meteorologicka-stanica-default-rtdb.europe-west1.firebasedatabase.app"
+#define FIREBASE_authorization_key "92Avq34xTQN38jJarUvcfrj7mzpHOzXj6HenJSOd"
 #define WIFI_SSID "meteor-net"       // replace with your SSID
-#define WIFI_PASSWORD "SOC2024"          //replace with your Password
+#define WIFI_PASSWORD "SOC-2024"          //replace with your Password
 
 
 
@@ -21,6 +20,7 @@
 #define DHT_TYPE DHT11    // Type of DHT sensor
 
 #define LIGHT_PIN 34      // Pin number for TEMT6000 sensor
+
 #define MPS_OUT_PIN 35     // OUT data pin for MPS20N0040D-D sensor
 #define MPS_SCK_PIN  32    // Clock data pin for MPS20N0040D-D sensor
 

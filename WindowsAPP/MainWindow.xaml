@@ -11,7 +11,6 @@
 
     <Grid>
 
-
         <!-- Background -->
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -23,7 +22,7 @@
             <!-- First Label -->
             <Label Content="{Binding CurrentTime}" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="1" Margin="0,20,20,0" FontFamily="Bahnschrift Condensed" Foreground="White" FontSize="18"/>
             <Label Content="{Binding SavedTime}" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="1" Margin="0,55,20,0" FontFamily="Bahnschrift Condensed" Foreground="White" FontSize="18"/>
- 
+
 
 
             <!-- Button -->
@@ -78,14 +77,15 @@
 
         <Grid Margin="20">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="37*"/>
+                <RowDefinition Height="31*"/>
+                <RowDefinition Height="68*"/>
+                <RowDefinition Height="68*"/>
+                <RowDefinition Height="68*"/>
             </Grid.RowDefinitions>
 
             <!-- Temperature -->
-            <StackPanel Grid.Row="0">
+            <StackPanel Grid.Row="0" Grid.RowSpan="2">
                 <TextBlock Text="{Binding TemperatureName}" Foreground="White" FontFamily="Bahnschrift Condensed" FontSize="20" VerticalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Temperature}"  Foreground="White" FontFamily="Bahnschrift Condensed" FontSize="48" VerticalAlignment="Center"/>
@@ -95,7 +95,7 @@
             </StackPanel>
 
             <!-- Humidity -->
-            <StackPanel Grid.Row="1">
+            <StackPanel Grid.Row="1" Margin="0,62,0,0" Grid.RowSpan="2">
                 <TextBlock Text="{Binding HumidityName}" Foreground="White" FontFamily="Bahnschrift Condensed" FontSize="20" VerticalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Humidity}" Foreground="White" FontFamily="Bahnschrift Condensed" FontSize="48" VerticalAlignment="Center"/>
@@ -105,7 +105,7 @@
             </StackPanel>
 
             <!-- Pressure -->
-            <StackPanel Grid.Row="2">
+            <StackPanel Grid.Row="2" Margin="0,136,0,0" Grid.RowSpan="2">
                 <TextBlock Text="{Binding PressureName}" Foreground="White" FontFamily="Bahnschrift Condensed" FontSize="20" VerticalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Pressure}" Foreground="White" FontFamily="Bahnschrift Condensed" FontSize="48" VerticalAlignment="Center"/>
@@ -115,7 +115,7 @@
             </StackPanel>
 
             <!-- Light Level -->
-            <StackPanel Grid.Row="3">
+            <StackPanel Grid.Row="3" Margin="0,136,0,0" Grid.RowSpan="2">
                 <TextBlock Text= "{Binding LightLevelName}" Foreground="White" FontFamily="Bahnschrift Condensed" FontSize="20" VerticalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding LightLevel}" Foreground="White" FontFamily="Bahnschrift Condensed" FontSize="48" VerticalAlignment="Center"/>

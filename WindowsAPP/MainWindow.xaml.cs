@@ -23,7 +23,6 @@ namespace WindowsAPP
         };
         private IFirebaseClient client;
         CultureInfo culture = CultureInfo.InvariantCulture;
-        private System.Timers.Timer timer = new System.Timers.Timer();
         DispatcherTimer dispatcherTimer;
         public MainWindow()
         {
@@ -60,7 +59,7 @@ namespace WindowsAPP
 
         private void Timer_Elapsed(object sender, EventArgs e)
         {
-            CurrentTime = DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss");
+            CurrentTime = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
 
             FirebaseResponse response = client.Get("RealTime");
             Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Body.ToString());
@@ -94,7 +93,7 @@ namespace WindowsAPP
 
             client.Set("Save", data);
 
-            client.Set("Save/Time", DateTime.Now.ToString("yyyy-dd-mm HH:mm:ss"));
+            client.Set("Save/Time", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
